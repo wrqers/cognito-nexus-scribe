@@ -47,31 +47,37 @@ export const NeuroPenSidebar = () => {
   ];
 
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
-    `flex items-center gap-2 p-2 rounded-md transition-all ${
+    `flex items-center gap-3 p-2 rounded-md transition-all ${
       isActive 
-        ? "bg-neuropen-primary text-white font-medium" 
-        : "hover:bg-neuropen-surface text-neuropen-text"
+        ? "bg-neuropen-highlight/10 text-neuropen-primary font-medium" 
+        : "hover:bg-neuropen-surface-lighter text-neuropen-muted hover:text-neuropen-text"
     }`;
 
   return (
     <Sidebar
       className={`${
         collapsed ? "w-16" : "w-64"
-      } bg-neuropen-background border-r border-neuropen-border transition-all`}
+      } bg-neuropen-surface border-r border-neuropen-border transition-all`}
       collapsible="icon"
     >
-      <SidebarTrigger className="m-2 self-end text-neuropen-text" />
+      <div className="flex items-center justify-center h-16 border-b border-neuropen-border">
+        {!collapsed && (
+          <h1 className="text-xl font-bold text-gradient">NeuroPen</h1>
+        )}
+      </div>
+      
+      <SidebarTrigger className="m-2 self-end text-neuropen-muted hover:text-neuropen-text" />
 
       <SidebarContent className="py-4">
         <SidebarGroup>
-          <SidebarGroupLabel className="text-neuropen-muted">Main</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-neuropen-muted">Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavClass}>
-                      <item.icon className="h-5 w-5" />
+                      <item.icon className={`h-5 w-5 ${!collapsed && "mr-2"}`} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>
@@ -81,15 +87,15 @@ export const NeuroPenSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        <SidebarGroup className="mt-4">
-          <SidebarGroupLabel className="text-neuropen-muted">Tools</SidebarGroupLabel>
+        <SidebarGroup className="mt-6">
+          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-neuropen-muted">Tools</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {toolsMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavClass}>
-                      <item.icon className="h-5 w-5" />
+                      <item.icon className={`h-5 w-5 ${!collapsed && "mr-2"}`} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
                   </SidebarMenuButton>

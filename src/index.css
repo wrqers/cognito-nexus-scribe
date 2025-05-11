@@ -5,50 +5,50 @@
 
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    --background: 235 15% 9%;
+    --foreground: 240 10% 98%;
     
-    --card: 240 10% 3.9%;
+    --card: 232 19% 15%;
     --card-foreground: 0 0% 98%;
     
-    --popover: 240 10% 3.9%;
+    --popover: 232 19% 15%;
     --popover-foreground: 0 0% 98%;
     
-    --primary: 267 33% 50%;
+    --primary: 267 91% 65%;
     --primary-foreground: 0 0% 98%;
     
     --secondary: 260 61% 75%;
     --secondary-foreground: 240 5.9% 10%;
     
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 237 17% 28%;
+    --muted-foreground: 237 10% 70%;
     
     --accent: 270 100% 86%;
     --accent-foreground: 240 5.9% 10%;
     
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 62.8% 50.6%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 237 17% 24%;
+    --input: 237 17% 24%;
     --ring: 240 4.9% 83.9%;
     
     --radius: 0.75rem;
 
-    --sidebar-background: 225 18% 14%;
+    --sidebar-background: 232 22% 12%;
     --sidebar-foreground: 240 5% 96%;
-    --sidebar-primary: 267 33% 50%;
+    --sidebar-primary: 267 91% 65%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-border: 237 17% 24%;
     --sidebar-ring: 240 4.9% 83.9%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border selection:bg-neuropen-primary/10 selection:text-white;
+    @apply border-border selection:bg-neuropen-primary/20 selection:text-white;
   }
   
   body {
@@ -78,4 +78,30 @@
   .text-gradient {
     @apply bg-gradient-to-br from-white via-white/90 to-white/70 bg-clip-text text-transparent;
   }
+  
+  .card-glow {
+    @apply relative;
+  }
+  
+  .card-glow::before {
+    content: "";
+    @apply absolute inset-0 bg-gradient-to-br from-neuropen-highlight/20 to-transparent rounded-lg -z-10 opacity-0 transition-opacity duration-300;
+  }
+  
+  .card-glow:hover::before {
+    @apply opacity-100;
+  }
+  
+  .bg-dot-pattern {
+    background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+/* Remove App.css styles that are no longer needed */
+#root {
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }

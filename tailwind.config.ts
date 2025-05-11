@@ -64,14 +64,16 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         neuropen: {
-          primary: '#6E59A5',
+          primary: '#8B5CF6',
           secondary: '#9b87f5',
           accent: '#D6BCFA',
-          background: '#1A1F2C',
+          background: '#141521',
           text: '#F1F0FB',
-          surface: '#2D3142',
-          border: '#403E43',
-          muted: '#8E9196',
+          surface: '#1E1F2E',
+          'surface-lighter': '#292A3E',
+          border: '#32334A',
+          muted: '#A0A0B0',
+          highlight: '#4F5FF6',
         }
       },
       borderRadius: {
@@ -98,12 +100,35 @@ export default {
             transform: "translateY(0)"
           }
         },
+        "scale-in": {
+          "0%": {
+            transform: "scale(0.95)",
+            opacity: "0"
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1"
+          }
+        },
+        "slide-in-right": {
+          "0%": { transform: "translateX(100%)" },
+          "100%": { transform: "translateX(0)" }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
-      }
+        "fade-in-delay-1": "fade-in 0.3s ease-out 0.1s forwards",
+        "fade-in-delay-2": "fade-in 0.3s ease-out 0.2s forwards",
+        "fade-in-delay-3": "fade-in 0.3s ease-out 0.3s forwards",
+        "scale-in": "scale-in 0.3s ease-out",
+        "slide-in-right": "slide-in-right 0.3s ease-out",
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-card': 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.05) 100%)',
+      },
     }
   },
   plugins: [require("tailwindcss-animate")],
