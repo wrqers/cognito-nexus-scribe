@@ -13,6 +13,9 @@ import ReaderPage from "./pages/Reader";
 import FlashcardsPage from "./pages/Flashcards";
 import ExperimentsPage from "./pages/Experiments";
 import SettingsPage from "./pages/Settings";
+import MetacognitiveInsights from "./pages/MetacognitiveInsights";
+import AdaptiveFlashcards from "./pages/AdaptiveFlashcards";
+import IntelligenceAmplification from "./pages/IntelligenceAmplification";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +35,9 @@ const App = () => (
           <Route path="/flashcards" element={<Layout><FlashcardsPage /></Layout>} />
           <Route path="/experiments" element={<Layout><ExperimentsPage /></Layout>} />
           <Route path="/settings" element={<Layout><SettingsPage /></Layout>} />
+          <Route path="/metacognitive-insights" element={<Layout><MetacognitiveInsights /></Layout>} />
+          <Route path="/adaptive-flashcards" element={<Layout><AdaptiveFlashcards /></Layout>} />
+          <Route path="/intelligence-amplification" element={<Layout><IntelligenceAmplification /></Layout>} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

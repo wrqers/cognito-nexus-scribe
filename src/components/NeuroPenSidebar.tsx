@@ -21,7 +21,10 @@ import {
   Settings, 
   LibraryBig, 
   FlaskConical, 
-  BookText 
+  BookText,
+  Sparkles,
+  Lightbulb,
+  BarChart3
 } from "lucide-react";
 
 export const NeuroPenSidebar = () => {
@@ -40,9 +43,15 @@ export const NeuroPenSidebar = () => {
     { title: "Reader", url: "/reader", icon: BookOpen },
   ];
 
-  const toolsMenuItems = [
+  const learningToolsItems = [
     { title: "Flashcards", url: "/flashcards", icon: BookText },
+    { title: "Adaptive Flashcards", url: "/adaptive-flashcards", icon: BarChart3 },
+    { title: "Metacognitive Insights", url: "/metacognitive-insights", icon: Sparkles },
+    { title: "Intelligence Amplification", url: "/intelligence-amplification", icon: Lightbulb },
     { title: "Experiments", url: "/experiments", icon: FlaskConical },
+  ];
+  
+  const systemItems = [
     { title: "Settings", url: "/settings", icon: Settings },
   ];
 
@@ -88,10 +97,28 @@ export const NeuroPenSidebar = () => {
         </SidebarGroup>
 
         <SidebarGroup className="mt-6">
-          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-neuropen-muted">Tools</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-neuropen-muted">Learning Tools</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {toolsMenuItems.map((item) => (
+              {learningToolsItems.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <NavLink to={item.url} className={getNavClass}>
+                      <item.icon className={`h-5 w-5 ${!collapsed && "mr-2"}`} />
+                      {!collapsed && <span>{item.title}</span>}
+                    </NavLink>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+        
+        <SidebarGroup className="mt-6">
+          <SidebarGroupLabel className="text-xs uppercase tracking-wider text-neuropen-muted">System</SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {systemItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <NavLink to={item.url} className={getNavClass}>
