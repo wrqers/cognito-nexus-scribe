@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { NeuroPenSidebar } from "@/components/NeuroPenSidebar";
 import { Button } from "@/components/ui/button";
@@ -10,8 +10,10 @@ interface LayoutProps {
 }
 
 export const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const [darkMode, setDarkMode] = useState(true);
+
   return (
-    <SidebarProvider collapsedWidth={56}>
+    <SidebarProvider>
       <div className="min-h-screen flex w-full bg-neuropen-background">
         <NeuroPenSidebar />
         <div className="flex-1 flex flex-col">
@@ -21,8 +23,11 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
               <h1 className="text-lg font-semibold text-neuropen-text">NeuroPen</h1>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon">
-                <Moon className="h-[1.2rem] w-[1.2rem]" />
+              <Button variant="ghost" size="icon" onClick={() => setDarkMode(!darkMode)}>
+                {darkMode ? 
+                  <Sun className="h-[1.2rem] w-[1.2rem]" /> : 
+                  <Moon className="h-[1.2rem] w-[1.2rem]" />
+                }
               </Button>
             </div>
           </header>

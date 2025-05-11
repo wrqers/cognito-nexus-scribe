@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   Sidebar,
@@ -25,7 +25,8 @@ import {
 } from "lucide-react";
 
 export const NeuroPenSidebar = () => {
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -57,12 +58,12 @@ export const NeuroPenSidebar = () => {
       className={`${
         collapsed ? "w-16" : "w-64"
       } bg-neuropen-background border-r border-neuropen-border transition-all`}
-      collapsible
+      collapsible="icon"
     >
       <SidebarTrigger className="m-2 self-end text-neuropen-text" />
 
       <SidebarContent className="py-4">
-        <SidebarGroup defaultOpen>
+        <SidebarGroup>
           <SidebarGroupLabel className="text-neuropen-muted">Main</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
