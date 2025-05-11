@@ -51,7 +51,7 @@ export const Layout: React.FC<LayoutProps> = ({ children }) => {
             <div className="flex items-center gap-3">
               <Button variant="ghost" size="icon" className="relative text-neuropen-muted hover:text-neuropen-text">
                 <Bell className="h-5 w-5" />
-                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-neuropen-highlight"></span>
+                <span className="absolute top-1 right-1 h-2 w-2 rounded-full bg-white"></span>
               </Button>
               <Button 
                 variant="ghost" 

@@ -26,42 +26,42 @@ const Index = () => {
       description: "Visualize connections between concepts",
       icon: Brain,
       route: "/graph",
-      color: "from-purple-500/20 to-blue-500/20"
+      color: "from-white/20 to-transparent"
     },
     {
       title: "Study Materials",
       description: "Organize and access your learning resources",
       icon: LibraryBig,
       route: "/materials",
-      color: "from-blue-500/20 to-cyan-500/20"
+      color: "from-white/20 to-transparent"
     },
     {
       title: "Notes",
       description: "Capture and organize your thoughts",
       icon: FileText,
       route: "/notes",
-      color: "from-emerald-500/20 to-teal-500/20"
+      color: "from-white/20 to-transparent"
     },
     {
       title: "Reader",
       description: "Read and annotate your documents",
       icon: BookOpen,
       route: "/reader",
-      color: "from-amber-500/20 to-orange-500/20"
+      color: "from-white/20 to-transparent"
     },
     {
       title: "Flashcards",
       description: "Reinforce your learning with spaced repetition",
       icon: BookText,
       route: "/flashcards",
-      color: "from-rose-500/20 to-pink-500/20"
+      color: "from-white/20 to-transparent"
     },
     {
       title: "Experiments",
       description: "Test new learning approaches",
       icon: FlaskConical,
       route: "/experiments",
-      color: "from-violet-500/20 to-purple-500/20"
+      color: "from-white/20 to-transparent"
     }
   ];
 

@@ -49,7 +49,7 @@ export const NeuroPenSidebar = () => {
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 p-2 rounded-md transition-all ${
       isActive 
-        ? "bg-neuropen-highlight/10 text-neuropen-primary font-medium" 
+        ? "bg-white/10 text-neuropen-primary font-medium" 
         : "hover:bg-neuropen-surface-lighter text-neuropen-muted hover:text-neuropen-text"
     }`;
 

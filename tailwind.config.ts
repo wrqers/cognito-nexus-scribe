@@ -64,16 +64,16 @@ export default {
           ring: 'hsl(var(--sidebar-ring))'
         },
         neuropen: {
-          primary: '#8B5CF6',
-          secondary: '#9b87f5',
-          accent: '#D6BCFA',
-          background: '#141521',
-          text: '#F1F0FB',
-          surface: '#1E1F2E',
-          'surface-lighter': '#292A3E',
-          border: '#32334A',
-          muted: '#A0A0B0',
-          highlight: '#4F5FF6',
+          primary: '#FFFFFF',
+          secondary: '#E0E0E0',
+          accent: '#F5F5F5',
+          background: '#000000',
+          text: '#FFFFFF',
+          surface: '#121212',
+          'surface-lighter': '#1E1E1E',
+          border: '#333333',
+          muted: '#888888',
+          highlight: '#CCCCCC',
         }
       },
       borderRadius: {
