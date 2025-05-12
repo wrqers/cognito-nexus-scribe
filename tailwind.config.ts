@@ -74,6 +74,9 @@ export default {
           border: '#333333',
           muted: '#888888',
           highlight: '#CCCCCC',
+          'accent-purple': '#9b87f5',
+          'accent-blue': '#1EAEDB',
+          'accent-mint': '#7DE2D1',
         }
       },
       borderRadius: {
@@ -114,6 +117,28 @@ export default {
           "0%": { transform: "translateX(100%)" },
           "100%": { transform: "translateX(0)" }
         },
+        "shine": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" }
+        },
+        "float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" }
+        },
+        "pulse-glow": {
+          "0%, 100%": { 
+            boxShadow: "0 0 5px rgba(255,255,255,0.3)", 
+            opacity: "0.7"
+          },
+          "50%": { 
+            boxShadow: "0 0 20px rgba(255,255,255,0.5)", 
+            opacity: "1"
+          }
+        },
+        "bounce": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-25%)" }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -124,11 +149,24 @@ export default {
         "fade-in-delay-3": "fade-in 0.3s ease-out 0.3s forwards",
         "scale-in": "scale-in 0.3s ease-out",
         "slide-in-right": "slide-in-right 0.3s ease-out",
+        "float": "float 3s ease-in-out infinite",
+        "pulse-glow": "pulse-glow 2s ease-in-out infinite",
+        "bounce": "bounce 1s ease-in-out infinite",
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-card': 'linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.05) 100%)',
+        'gradient-purple': 'linear-gradient(90deg, hsla(277, 75%, 84%, 1) 0%, hsla(297, 50%, 51%, 1) 100%)',
+        'gradient-blue': 'linear-gradient(90deg, hsla(221, 45%, 73%, 1) 0%, hsla(220, 78%, 29%, 1) 100%)',
+        'gradient-mint': 'linear-gradient(90deg, hsla(46, 73%, 75%, 1) 0%, hsla(176, 73%, 88%, 1) 100%)',
       },
+      backdropBlur: {
+        xs: '2px',
+      },
+      transitionProperty: {
+        'height': 'height',
+        'spacing': 'margin, padding',
+      }
     }
   },
   plugins: [require("tailwindcss-animate")],
