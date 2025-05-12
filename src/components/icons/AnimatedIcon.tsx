@@ -5,6 +5,7 @@ import { LucideProps } from 'lucide-react';
 interface AnimatedIconProps extends LucideProps {
   hoverColor?: string;
   animateOnHover?: "pulse" | "bounce" | "spin" | "none";
+  children: React.ReactNode;
 }
 
 export const AnimatedIcon = ({ 

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from "react";
 import { 
   CardContent, 
@@ -20,6 +19,8 @@ import { AnimatedProgress } from "@/components/ui/animated-progress";
 import { EnhancedCard } from "@/components/EnhancedCard";
 import { AnimatedWrapper } from "@/components/AnimatedWrapper";
 import { AnimatedIcon } from "@/components/icons/AnimatedIcon";
+import { PageHeader } from "@/components/PageHeader";
+import { ParallaxBackground } from "@/components/ParallaxBackground";
 
 const MetacognitiveInsights = () => {
   // References for GSAP animations
@@ -63,16 +64,12 @@ const MetacognitiveInsights = () => {
 
   return (
     <div className="flex flex-col gap-6">
-      <AnimatedWrapper type="slide-up" className="mb-4">
-        <section ref={headerRef}>
-          <h1 className="text-3xl font-bold text-neuropen-text mb-2 relative">
-            Metacognitive Insights
-            <div className="absolute -right-4 -top-4 h-12 w-12 rounded-full bg-gradient-to-br from-neuropen-accent-purple/20 to-transparent blur-lg parallax-element"></div>
-            <div className="absolute left-20 -bottom-2 h-8 w-8 rounded-full bg-gradient-to-br from-neuropen-accent-blue/20 to-transparent blur-md parallax-element"></div>
-          </h1>
-          <p className="text-neuropen-muted">Understand your learning patterns and cognitive blind spots</p>
-        </section>
-      </AnimatedWrapper>
+      <ParallaxBackground particleCount={15} />
+      
+      <PageHeader 
+        title="Metacognitive Insights"
+        description="Understand your learning patterns and cognitive blind spots"
+      />
 
       <Tabs defaultValue="understanding" className="animate-fade-in" ref={tabsRef}>
         <TabsList className="bg-neuropen-surface-lighter relative overflow-hidden">
@@ -95,7 +92,7 @@ const MetacognitiveInsights = () => {
         </TabsList>
         
         <TabsContent value="understanding" className="mt-4">
-          <EnhancedCard className="bg-neuropen-surface border-neuropen-border" ref={cardsRef} hoverEffect="none">
+          <EnhancedCard className="bg-neuropen-surface border-neuropen-border" hoverEffect="none">
             <CardHeader>
               <CardTitle className="text-neuropen-text flex items-center gap-2">
                 <BadgeCheck className="h-5 w-5 text-neuropen-accent-purple" />

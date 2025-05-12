@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, forwardRef } from "react";
 import { 
   Card, 
   CardContent, 
@@ -21,12 +21,15 @@ interface EnhancedCardProps {
   cardProps?: React.ComponentProps<typeof Card>;
 }
 
-export const EnhancedCard: React.FC<EnhancedCardProps> = ({ 
+export const EnhancedCard = forwardRef<
+  HTMLDivElement, 
+  EnhancedCardProps
+>(({ 
   children, 
   className, 
   hoverEffect = "glow",
   cardProps = {}
-}) => {
+}, ref) => {
   const [isHovered, setIsHovered] = useState(false);
   
   const hoverClasses = {
@@ -38,6 +41,7 @@ export const EnhancedCard: React.FC<EnhancedCardProps> = ({
   
   return (
     <Card
+      ref={ref}
       className={cn(
         className,
         hoverClasses[hoverEffect],
@@ -50,6 +54,8 @@ export const EnhancedCard: React.FC<EnhancedCardProps> = ({
       {children}
     </Card>
   );
-};
+});
+
+EnhancedCard.displayName = "EnhancedCard";
 
 export { CardContent, CardDescription, CardHeader, CardTitle, CardFooter };
