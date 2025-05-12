@@ -59,6 +59,24 @@
   html {
     @apply scroll-smooth;
   }
+  
+  /* Custom scrollbars */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    @apply bg-neuropen-background;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    @apply bg-neuropen-border rounded-full transition-colors;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-neuropen-muted;
+  }
 }
 
 @layer utilities {
@@ -77,6 +95,14 @@
   
   .text-gradient {
     @apply bg-gradient-to-br from-white via-white/90 to-white/70 bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-blue {
+    @apply bg-gradient-to-r from-neuropen-accent-blue to-neuropen-accent-mint bg-clip-text text-transparent;
+  }
+  
+  .text-gradient-purple {
+    @apply bg-gradient-to-r from-neuropen-accent-purple to-neuropen-accent-blue bg-clip-text text-transparent;
   }
   
   .card-glow {
@@ -152,6 +178,84 @@
 
   .animate-pulse-glow {
     animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-300 hover:scale-105;
+  }
+  
+  .hover-glow {
+    @apply transition-all duration-300;
+  }
+  
+  .hover-glow:hover {
+    @apply shadow-[0_0_15px_rgba(255,255,255,0.15)];
+  }
+  
+  .blur-backdrop {
+    @apply backdrop-blur-md bg-black/50;
+  }
+  
+  .text-shadow {
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .animate-delay-100 {
+    animation-delay: 100ms;
+  }
+  
+  .animate-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animate-delay-300 {
+    animation-delay: 300ms;
+  }
+  
+  .animate-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animate-delay-500 {
+    animation-delay: 500ms;
+  }
+  
+  .animate-duration-slow {
+    animation-duration: 1.5s;
+  }
+  
+  .animate-duration-slower {
+    animation-duration: 2s;
+  }
+  
+  .clip-path-circle {
+    clip-path: circle(50% at 50% 50%);
+  }
+  
+  .highlight-blue {
+    @apply relative;
+  }
+  
+  .highlight-blue::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-full h-[2px] bg-neuropen-accent-blue transform scale-x-0 origin-bottom-left transition-transform duration-300;
+  }
+  
+  .highlight-blue:hover::after {
+    @apply transform scale-x-100;
+  }
+  
+  .highlight-purple {
+    @apply relative;
+  }
+  
+  .highlight-purple::after {
+    content: "";
+    @apply absolute bottom-0 left-0 w-full h-[2px] bg-neuropen-accent-purple transform scale-x-0 origin-bottom-left transition-transform duration-300;
+  }
+  
+  .highlight-purple:hover::after {
+    @apply transform scale-x-100;
   }
 }
 
