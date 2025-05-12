@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useEffect, useRef } from "react";
 import { 
   Card, 
   CardContent, 
@@ -16,16 +17,54 @@ import {
   Lightbulb
 } from "lucide-react";
 import { ArrowRightLeft } from "@/components/icons/ArrowRightLeft";
+import { gsap } from "gsap";
 
 const MetacognitiveInsights = () => {
+  // References for GSAP animations
+  const headerRef = useRef(null);
+  const tabsRef = useRef(null);
+  const cardsRef = useRef(null);
+  const progressRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  // Initialize GSAP animations
+  useEffect(() => {
+    // Header animation
+    gsap.fromTo(
+      headerRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, ease: "power3.out" }
+    );
+
+    // Tabs animation
+    gsap.fromTo(
+      tabsRef.current,
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: "power3.out" }
+    );
+
+    // Cards animation
+    gsap.fromTo(
+      cardsRef.current?.children || [],
+      { opacity: 0, y: 20 },
+      { opacity: 1, y: 0, duration: 0.5, stagger: 0.1, delay: 0.4, ease: "power3.out" }
+    );
+
+    // Progress bars animation
+    gsap.fromTo(
+      progressRefs.current,
+      { scaleX: 0 },
+      { scaleX: 1, duration: 1, stagger: 0.1, delay: 0.8, ease: "power3.out", transformOrigin: "left center" }
+    );
+  }, []);
+
   return (
     <div className="flex flex-col gap-6">
-      <section className="mb-4 animate-fade-in">
+      <section className="mb-4" ref={headerRef}>
         <h1 className="text-3xl font-bold text-neuropen-text mb-2">Metacognitive Insights</h1>
         <p className="text-neuropen-muted">Understand your learning patterns and cognitive blind spots</p>
       </section>
 
-      <Tabs defaultValue="understanding" className="animate-fade-in">
+      <Tabs defaultValue="understanding" className="animate-fade-in" ref={tabsRef}>
         <TabsList className="bg-neuropen-surface-lighter">
           <TabsTrigger value="understanding" className="text-neuropen-muted data-[state=active]:text-neuropen-text">
             Understanding vs. Recognition
@@ -39,7 +78,7 @@ const MetacognitiveInsights = () => {
         </TabsList>
         
         <TabsContent value="understanding" className="mt-4">
-          <Card className="bg-neuropen-surface border-neuropen-border">
+          <Card className="bg-neuropen-surface border-neuropen-border" ref={cardsRef}>
             <CardHeader>
               <CardTitle className="text-neuropen-text flex items-center gap-2">
                 <BadgeCheck className="h-5 w-5 text-neuropen-primary" />
@@ -61,8 +100,10 @@ const MetacognitiveInsights = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Progress value={80} className="h-2 bg-neuropen-background" indicatorClassName="bg-neuropen-primary" />
-                    <Progress value={64} className="h-2 bg-neuropen-background" indicatorClassName="bg-white/50" />
+                    <div className="relative w-full">
+                      <Progress value={80} className="h-2 bg-neuropen-background" ref={el => progressRefs.current[0] = el} />
+                      <div className="absolute top-0 left-0 h-2 bg-white/50 rounded-full" style={{ width: '64%', opacity: 0.5 }}></div>
+                    </div>
                   </div>
                 </div>
 
@@ -76,8 +117,10 @@ const MetacognitiveInsights = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Progress value={60} className="h-2 bg-neuropen-background" indicatorClassName="bg-neuropen-primary" />
-                    <Progress value={42} className="h-2 bg-neuropen-background" indicatorClassName="bg-white/50" />
+                    <div className="relative w-full">
+                      <Progress value={60} className="h-2 bg-neuropen-background" ref={el => progressRefs.current[1] = el} />
+                      <div className="absolute top-0 left-0 h-2 bg-white/50 rounded-full" style={{ width: '42%', opacity: 0.5 }}></div>
+                    </div>
                   </div>
                 </div>
 
@@ -91,8 +134,10 @@ const MetacognitiveInsights = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <Progress value={80} className="h-2 bg-neuropen-background" indicatorClassName="bg-neuropen-primary" />
-                    <Progress value={86} className="h-2 bg-neuropen-background" indicatorClassName="bg-white/50" />
+                    <div className="relative w-full">
+                      <Progress value={80} className="h-2 bg-neuropen-background" ref={el => progressRefs.current[2] = el} />
+                      <div className="absolute top-0 left-0 h-2 bg-white/50 rounded-full" style={{ width: '86%', opacity: 0.5 }}></div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -130,7 +175,7 @@ const MetacognitiveInsights = () => {
                     evidence: "Missing connections in knowledge graph, tutor highlighted inconsistency"
                   }
                 ].map((item, index) => (
-                  <div key={index} className="p-4 bg-neuropen-background rounded-md">
+                  <div key={index} className="p-4 bg-neuropen-background rounded-md blindspot-item">
                     <div className="flex items-center gap-2 mb-2">
                       <AlertCircle className="h-4 w-4 text-white/70" />
                       <h4 className="text-neuropen-text font-medium">{item.topic}</h4>
@@ -158,7 +203,7 @@ const MetacognitiveInsights = () => {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 depth-grid">
                 {[
                   {
                     concept: "Statistical Learning",
@@ -201,14 +246,14 @@ const MetacognitiveInsights = () => {
                     }
                   }
                 ].map((item, index) => (
-                  <div key={index} className="p-4 bg-neuropen-background rounded-md">
+                  <div key={index} className="p-4 bg-neuropen-background rounded-md depth-item">
                     <div className="flex justify-between items-center mb-3">
                       <h4 className="text-neuropen-text font-medium">{item.concept}</h4>
                       <div className="text-sm font-medium text-neuropen-primary">{item.depth}%</div>
                     </div>
-                    <div className="w-full h-1.5 bg-neuropen-surface-lighter rounded-full mb-3">
+                    <div className="w-full h-1.5 bg-neuropen-surface-lighter rounded-full mb-3 progress-bar-container">
                       <div 
-                        className="h-full bg-neuropen-primary rounded-full" 
+                        className="h-full bg-neuropen-primary rounded-full progress-bar"
                         style={{ width: `${item.depth}%` }}
                       ></div>
                     </div>
