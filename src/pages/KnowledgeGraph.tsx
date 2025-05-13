@@ -11,9 +11,33 @@ import { Network, Search, Filter, Plus, ZoomIn, ZoomOut } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
+import { KnowledgeGraphVisualization } from "@/components/KnowledgeGraphVisualization";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { toast } from "@/hooks/use-toast";
 
 const KnowledgeGraph = () => {
   const [zoomLevel, setZoomLevel] = useState([50]);
+  const [showGraph, setShowGraph] = useState(false);
+  const [isNodeDialogOpen, setIsNodeDialogOpen] = useState(false);
+  const [newNodeName, setNewNodeName] = useState("");
+  const [newNodeCategory, setNewNodeCategory] = useState("knowledge");
+
+  const handleCreateNode = () => {
+    setIsNodeDialogOpen(true);
+  };
+  
+  const handleSaveNode = () => {
+    if (newNodeName.trim()) {
+      toast({
+        title: "Node Created",
+        description: `Created node: "${newNodeName}" in category: ${newNodeCategory}`,
+      });
+      setIsNodeDialogOpen(false);
+      setShowGraph(true);
+      setNewNodeName("");
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -33,8 +57,11 @@ const KnowledgeGraph = () => {
         <Button variant="outline" className="border-neuropen-border">
           <Filter className="h-4 w-4 mr-2" /> Filter
         </Button>
-        <Button className="bg-neuropen-primary hover:bg-neuropen-primary/90">
-          <Plus className="h-4 w-4 mr-2" /> New Connection
+        <Button 
+          className="bg-neuropen-primary hover:bg-neuropen-primary/90"
+          onClick={handleCreateNode}
+        >
+          <Plus className="h-4 w-4 mr-2" /> New Node
         </Button>
       </div>
 
@@ -48,18 +75,10 @@ const KnowledgeGraph = () => {
           </div>
         </CardHeader>
         <CardContent className="pt-2">
-          <div className="flex items-center justify-center min-h-[400px] border-2 border-dashed border-neuropen-border rounded-lg">
-            <div className="text-center">
-              <Network className="h-16 w-16 text-neuropen-muted mx-auto mb-4" />
-              <h3 className="text-xl font-medium text-neuropen-text mb-2">Your Knowledge Graph</h3>
-              <p className="text-neuropen-muted text-center max-w-md mb-4">
-                Start adding notes and connections to visualize your knowledge network.
-              </p>
-              <Button className="bg-neuropen-primary hover:bg-neuropen-primary/90">
-                Create Your First Node
-              </Button>
-            </div>
-          </div>
+          <KnowledgeGraphVisualization 
+            isEmpty={!showGraph} 
+            onCreateNode={handleCreateNode} 
+          />
         </CardContent>
         <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-neuropen-surface/80 backdrop-blur-sm p-2 rounded-md">
           <ZoomOut className="h-4 w-4 text-neuropen-muted" />
@@ -73,6 +92,56 @@ const KnowledgeGraph = () => {
           <ZoomIn className="h-4 w-4 text-neuropen-muted" />
         </div>
       </Card>
+      
+      <Dialog open={isNodeDialogOpen} onOpenChange={setIsNodeDialogOpen}>
+        <DialogContent className="bg-neuropen-surface border-neuropen-border">
+          <DialogHeader>
+            <DialogTitle>Create New Node</DialogTitle>
+            <DialogDescription>
+              Add a new concept or idea to your knowledge graph.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">
+                Name
+              </Label>
+              <Input
+                id="name"
+                value={newNodeName}
+                onChange={(e) => setNewNodeName(e.target.value)}
+                className="col-span-3"
+                placeholder="E.g., Quantum Entanglement"
+              />
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="category" className="text-right">
+                Category
+              </Label>
+              <select
+                id="category"
+                value={newNodeCategory}
+                onChange={(e) => setNewNodeCategory(e.target.value)}
+                className="col-span-3 flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <option value="physics">Physics</option>
+                <option value="philosophy">Philosophy</option>
+                <option value="ai">Artificial Intelligence</option>
+                <option value="mathematics">Mathematics</option>
+                <option value="knowledge">General Knowledge</option>
+              </select>
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsNodeDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveNode}>Create Node</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

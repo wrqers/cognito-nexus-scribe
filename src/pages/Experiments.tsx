@@ -79,10 +79,10 @@ const ExperimentCard = ({
       </CardContent>
       <CardFooter>
         <Button 
-          className={status === "coming-soon" ? "bg-neuropen-muted/70" : "bg-neuropen-primary hover:bg-neuropen-primary/90"} 
+          className="w-full"
           disabled={status === "coming-soon"}
           onClick={onClick}
-          className="w-full"
+          variant={status === "coming-soon" ? "ghost" : "default"}
         >
           {status === "coming-soon" ? "Coming Soon" : "Try Now"}
         </Button>

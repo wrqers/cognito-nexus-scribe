@@ -18,7 +18,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Search,
-  Bookmark
+  Bookmark,
+  Send
 } from "lucide-react";
 import { 
   Tabs, 
@@ -48,9 +49,42 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { useRagChat, ChatMessage } from "@/hooks/useRagChat";
+import { NeuropenLoader } from "@/components/NeuropenLoader"; 
+import { AnimatedIcon } from "@/components/icons/AnimatedIcon";
 
 const ReaderPage = () => {
   const [isDocumentOpen, setIsDocumentOpen] = useState(false);
+  const [inputMessage, setInputMessage] = useState("");
+  const { messages, isLoading, sendMessage } = useRagChat("quantum-physics");
+  
+  const handleSendMessage = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputMessage.trim()) {
+      sendMessage(inputMessage);
+      setInputMessage("");
+    }
+  };
+
+  const ChatMessage = ({ message }: { message: ChatMessage }) => {
+    const isUser = message.role === "user";
+    
+    return (
+      <div className={`mb-4 ${isUser ? "flex flex-row-reverse" : ""}`}>
+        <div className={`max-w-[80%] ${isUser ? "bg-neuropen-primary/10" : "bg-neuropen-surface"} p-3 rounded-lg`}>
+          <div className="font-medium mb-1">{isUser ? "You" : "AI Assistant"}</div>
+          <div className="text-sm whitespace-pre-wrap">
+            {message.content.split('\n\n').map((paragraph, i) => (
+              <p key={i} className="mb-2">{paragraph}</p>
+            ))}
+          </div>
+          <div className="text-xs text-neuropen-muted mt-2">
+            {message.timestamp.toLocaleTimeString()}
+          </div>
+        </div>
+      </div>
+    );
+  };
   
   return (
     <div className="flex flex-col gap-4">
@@ -163,9 +197,9 @@ const ReaderPage = () => {
           <ResizableHandle withHandle />
           
           <ResizablePanel defaultSize={25} minSize={20}>
-            <Tabs defaultValue="notes" className="h-full flex flex-col">
+            <Tabs defaultValue="ai" className="h-full flex flex-col">
               <TabsList className="mx-4 my-2 justify-start">
-                <TabsTrigger value="notes" className="relative">
+                <TabsTrigger value="notes">
                   <FileText className="h-4 w-4 mr-2" /> Notes
                 </TabsTrigger>
                 <TabsTrigger value="ai">
@@ -188,21 +222,66 @@ const ReaderPage = () => {
                 </div>
               </TabsContent>
               
-              <TabsContent value="ai" className="flex-1 p-4 overflow-auto">
+              <TabsContent value="ai" className="flex-1 p-4 overflow-auto flex flex-col h-full">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="font-medium">AI Learning Assistant</h3>
+                  <h3 className="font-medium flex items-center">
+                    <AnimatedIcon animateOnHover="pulse" hoverColor="#9b87f5">
+                      <MessageSquareText className="h-4 w-4 mr-2" />
+                    </AnimatedIcon>
+                    AI Learning Assistant
+                  </h3>
                 </div>
+                
                 <div className="border border-neuropen-border rounded-lg bg-neuropen-surface p-4 mb-4">
                   <p className="text-sm">
-                    Ask me questions about the document, request explanations, or generate learning materials.
+                    Ask me questions about quantum physics, request explanations, or generate learning materials.
                   </p>
                 </div>
-                <div className="mt-auto">
-                  <Input className="mb-2" placeholder="Ask a question..." />
-                  <Button className="w-full bg-neuropen-primary hover:bg-neuropen-primary/90">
-                    Send Question
-                  </Button>
+                
+                <div className="flex-1 overflow-auto mb-4">
+                  {messages.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-center">
+                      <AnimatedIcon animateOnHover="pulse" hoverColor="#9b87f5">
+                        <MessageSquareText className="h-10 w-10 text-neuropen-muted mb-4" />
+                      </AnimatedIcon>
+                      <h4 className="font-medium mb-2">Start a Conversation</h4>
+                      <p className="text-sm text-neuropen-muted max-w-xs">
+                        Ask questions about this document to deepen your understanding with AI assistance.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      {messages.map((message) => (
+                        <ChatMessage key={message.id} message={message} />
+                      ))}
+                      {isLoading && (
+                        <div className="flex justify-center py-4">
+                          <NeuropenLoader size="sm" variant="primary" />
+                        </div>
+                      )}
+                    </div>
+                  )}
                 </div>
+                
+                <form onSubmit={handleSendMessage} className="mt-auto">
+                  <div className="relative">
+                    <Input 
+                      className="pr-10" 
+                      placeholder="Ask about quantum physics..." 
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      disabled={isLoading}
+                    />
+                    <Button 
+                      type="submit" 
+                      size="icon" 
+                      className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7"
+                      disabled={isLoading || !inputMessage.trim()}
+                    >
+                      <Send className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </form>
               </TabsContent>
               
               <TabsContent value="highlights" className="flex-1 p-4 overflow-auto">
