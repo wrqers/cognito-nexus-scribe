@@ -1,155 +1,234 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { 
   Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle,
-  CardFooter
+  CardContent 
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { FileText, Plus, Search, Filter, Book, BookOpen, Upload, File, Library } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  FileUp, 
+  BookOpen, 
+  BookText,
+  FileText,
+  MessageSquareText,
+  Highlighter,
+  Plus,
+  Menu,
+  ChevronLeft,
+  ChevronRight,
+  Search,
+  Bookmark
+} from "lucide-react";
+import { 
+  Tabs, 
+  TabsContent, 
+  TabsList, 
+  TabsTrigger 
+} from "@/components/ui/tabs";
+import { 
+  ResizablePanelGroup,
+  ResizablePanel,
+  ResizableHandle
+} from "@/components/ui/resizable";
+import { 
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 const ReaderPage = () => {
-  // Sample documents data
-  const documents = [
-    {
-      id: 1,
-      title: "Principles of Neural Science",
-      author: "Eric R. Kandel",
-      type: "PDF",
-      lastOpened: "2 days ago",
-      progress: 45
-    },
-    {
-      id: 2,
-      title: "Computer Systems: A Programmer's Perspective",
-      author: "Randal E. Bryant",
-      type: "PDF",
-      lastOpened: "Yesterday",
-      progress: 63
-    },
-    {
-      id: 3,
-      title: "Thinking, Fast and Slow",
-      author: "Daniel Kahneman",
-      type: "EPUB",
-      lastOpened: "4 days ago",
-      progress: 28
-    },
-    {
-      id: 4,
-      title: "Introduction to Algorithms",
-      author: "Thomas H. Cormen",
-      type: "PDF",
-      lastOpened: "1 week ago",
-      progress: 72
-    },
-  ];
-
+  const [isDocumentOpen, setIsDocumentOpen] = useState(false);
+  
   return (
     <div className="flex flex-col gap-4">
       <section className="mb-4">
-        <h1 className="text-3xl font-bold text-neuropen-text mb-2">Reader</h1>
-        <p className="text-neuropen-muted">Manage and annotate your documents and study materials.</p>
+        <h1 className="text-3xl font-bold text-neuropen-text mb-2">Neural Reader</h1>
+        <p className="text-neuropen-muted">Read, annotate, and extract knowledge from documents.</p>
       </section>
-
-      <div className="flex items-center gap-2 mb-4">
-        <div className="relative flex-1">
-          <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 text-neuropen-muted h-4 w-4" />
-          <Input 
-            className="pl-8 bg-neuropen-surface border-neuropen-border text-neuropen-text"
-            placeholder="Search materials..." 
-          />
-        </div>
-        <Button variant="outline" className="border-neuropen-border text-neuropen-text">
-          <Filter className="h-4 w-4 mr-2" /> Filter
-        </Button>
-        <Button className="bg-neuropen-primary hover:bg-neuropen-primary/90">
-          <Upload className="h-4 w-4 mr-2" /> Import
-        </Button>
-      </div>
-
-      <Tabs defaultValue="recent" className="w-full">
-        <TabsList className="bg-neuropen-surface border border-neuropen-border">
-          <TabsTrigger value="recent" className="data-[state=active]:bg-neuropen-primary data-[state=active]:text-white">
-            Recent
-          </TabsTrigger>
-          <TabsTrigger value="all" className="data-[state=active]:bg-neuropen-primary data-[state=active]:text-white">
-            All Documents
-          </TabsTrigger>
-          <TabsTrigger value="favorites" className="data-[state=active]:bg-neuropen-primary data-[state=active]:text-white">
-            Favorites
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="recent" className="mt-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {documents.map(doc => (
-              <Card key={doc.id} className="bg-neuropen-surface border-neuropen-border hover:border-neuropen-primary transition-colors cursor-pointer">
-                <CardHeader className="pb-2">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <CardTitle className="text-neuropen-text text-base">{doc.title}</CardTitle>
-                      <CardDescription className="text-neuropen-muted text-xs">
-                        {doc.author}
-                      </CardDescription>
-                    </div>
-                    <span className="px-2 py-1 rounded-md text-xs bg-neuropen-primary/20 text-neuropen-accent">
-                      {doc.type}
-                    </span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pb-2">
-                  <p className="text-xs text-neuropen-muted mb-1">Last opened: {doc.lastOpened}</p>
-                  <div className="w-full h-1 bg-neuropen-background rounded-full overflow-hidden mt-2">
-                    <div 
-                      className="h-full bg-neuropen-primary" 
-                      style={{ width: `${doc.progress}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-xs text-right text-neuropen-muted mt-1">{doc.progress}%</p>
-                </CardContent>
-                <CardFooter className="pt-0">
-                  <Button variant="ghost" size="sm" className="text-neuropen-primary hover:text-neuropen-secondary hover:bg-neuropen-primary/10">
-                    <BookOpen className="h-4 w-4 mr-2" /> Open
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-            
-            <Card className="bg-neuropen-surface border-neuropen-border border-dashed flex flex-col items-center justify-center p-6 h-[166px]">
-              <Upload className="h-8 w-8 text-neuropen-muted mb-2" />
-              <p className="text-neuropen-muted text-sm text-center">
-                Drag and drop files here or click to import
+      
+      {!isDocumentOpen ? (
+        <>
+          <Card className="bg-neuropen-surface border-neuropen-border mb-6">
+            <CardContent className="p-6">
+              <div className="flex flex-col items-center justify-center py-8 border-2 border-dashed border-neuropen-border rounded-lg">
+                <FileUp className="h-12 w-12 text-neuropen-muted mb-4" />
+                <h3 className="text-xl font-medium text-neuropen-text mb-2">Upload Document</h3>
+                <p className="text-neuropen-muted text-center max-w-md mb-6">
+                  Drag and drop your document here or click to browse. Supported formats: PDF, EPUB, DOCX, TXT, MD.
+                </p>
+                <Button className="bg-neuropen-primary hover:bg-neuropen-primary/90">
+                  Browse Files
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <h2 className="text-xl font-semibold text-neuropen-text mb-4">Recent Documents</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {/* Empty state */}
+            <Card className="bg-neuropen-surface border-neuropen-border flex flex-col items-center justify-center p-6 h-[220px]">
+              <BookOpen className="h-12 w-12 text-neuropen-muted mb-4" />
+              <h3 className="text-lg font-medium text-neuropen-text mb-2">No Documents Yet</h3>
+              <p className="text-neuropen-muted text-center mb-4">
+                Upload your first document to start reading and learning.
               </p>
-              <Button variant="ghost" className="mt-2 text-neuropen-primary text-sm">
-                Import Document
-              </Button>
             </Card>
           </div>
-        </TabsContent>
-        <TabsContent value="all">
-          <div className="flex flex-col items-center justify-center p-8">
-            <Library className="h-12 w-12 text-neuropen-muted mb-4" />
-            <h3 className="text-neuropen-text text-xl mb-2">Your Document Library</h3>
-            <p className="text-neuropen-muted text-center">
-              All your imported documents will be organized here.
-            </p>
-          </div>
-        </TabsContent>
-        <TabsContent value="favorites">
-          <div className="flex flex-col items-center justify-center p-8">
-            <Book className="h-12 w-12 text-neuropen-muted mb-4" />
-            <h3 className="text-neuropen-text text-xl mb-2">Your Favorite Documents</h3>
-            <p className="text-neuropen-muted text-center">
-              Mark documents as favorites for quick access.
-            </p>
-          </div>
-        </TabsContent>
-      </Tabs>
+        </>
+      ) : (
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="min-h-[600px] rounded-lg border border-neuropen-border"
+        >
+          <ResizablePanel defaultSize={75} minSize={50}>
+            <div className="h-full flex flex-col bg-neuropen-surface">
+              <div className="p-4 border-b border-neuropen-border flex items-center justify-between">
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem>
+                      <BreadcrumbLink href="/reader">Documents</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    <BreadcrumbSeparator />
+                    <BreadcrumbItem>
+                      <BreadcrumbPage>Quantum Physics Introduction.pdf</BreadcrumbPage>
+                    </BreadcrumbItem>
+                  </BreadcrumbList>
+                </Breadcrumb>
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="sm">
+                    <Search className="h-4 w-4" />
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    <Bookmark className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              
+              <div className="flex-1 overflow-auto p-6 bg-white dark:bg-slate-900">
+                {/* Document content would go here */}
+                <div className="max-w-2xl mx-auto">
+                  <h1 className="text-2xl font-bold mb-4">Introduction to Quantum Physics</h1>
+                  <p className="mb-4">
+                    Quantum physics is the branch of physics that deals with the behavior of matter and light on a subatomic and atomic level. It attempts to explain the properties of atoms and molecules and their fundamental particles like protons, neutrons, electrons, gluons, and quarks.
+                  </p>
+                  <p className="mb-4">
+                    The birth of quantum mechanics is attributed to Max Planck's quantum hypothesis in 1900. Planck was working on the problem of how the radiation from a glowing body changes with temperature. He proposed that energy could only be emitted or absorbed in discrete units, which he called quanta.
+                  </p>
+                  <p className="mb-4">
+                    This was followed by Albert Einstein's paper on the photoelectric effect in 1905, which proposed that light also delivers its energy in chunks, later called photons.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="p-2 border-t border-neuropen-border flex items-center justify-between">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink isActive>1</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink>2</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationLink>3</PaginationLink>
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationEllipsis />
+                    </PaginationItem>
+                    <PaginationItem>
+                      <PaginationNext />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </div>
+            </div>
+          </ResizablePanel>
+          
+          <ResizableHandle withHandle />
+          
+          <ResizablePanel defaultSize={25} minSize={20}>
+            <Tabs defaultValue="notes" className="h-full flex flex-col">
+              <TabsList className="mx-4 my-2 justify-start">
+                <TabsTrigger value="notes" className="relative">
+                  <FileText className="h-4 w-4 mr-2" /> Notes
+                </TabsTrigger>
+                <TabsTrigger value="ai">
+                  <MessageSquareText className="h-4 w-4 mr-2" /> AI Chat
+                </TabsTrigger>
+                <TabsTrigger value="highlights">
+                  <Highlighter className="h-4 w-4 mr-2" /> Highlights
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="notes" className="flex-1 p-4 overflow-auto">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-medium">Document Notes</h3>
+                  <Button size="sm" variant="outline" className="h-8">
+                    <Plus className="h-3 w-3 mr-1" /> Add Note
+                  </Button>
+                </div>
+                <div className="border border-dashed border-neuropen-border rounded-lg p-4 text-center text-neuropen-muted">
+                  No notes yet. Add notes while reading to organize your thoughts.
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="ai" className="flex-1 p-4 overflow-auto">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-medium">AI Learning Assistant</h3>
+                </div>
+                <div className="border border-neuropen-border rounded-lg bg-neuropen-surface p-4 mb-4">
+                  <p className="text-sm">
+                    Ask me questions about the document, request explanations, or generate learning materials.
+                  </p>
+                </div>
+                <div className="mt-auto">
+                  <Input className="mb-2" placeholder="Ask a question..." />
+                  <Button className="w-full bg-neuropen-primary hover:bg-neuropen-primary/90">
+                    Send Question
+                  </Button>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="highlights" className="flex-1 p-4 overflow-auto">
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="font-medium">Highlights & Annotations</h3>
+                </div>
+                <div className="border border-dashed border-neuropen-border rounded-lg p-4 text-center text-neuropen-muted">
+                  No highlights yet. Highlight text in the document to save important concepts.
+                </div>
+              </TabsContent>
+            </Tabs>
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      )}
+      
+      {/* Quick action button to simulate opening a document */}
+      {!isDocumentOpen && (
+        <div className="fixed bottom-6 right-6">
+          <Button 
+            className="bg-neuropen-primary hover:bg-neuropen-primary/90 rounded-full w-12 h-12 p-0"
+            onClick={() => setIsDocumentOpen(true)}
+          >
+            <BookText className="h-5 w-5" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

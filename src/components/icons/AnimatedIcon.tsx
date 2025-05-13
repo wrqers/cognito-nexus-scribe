@@ -31,12 +31,16 @@ export const AnimatedIcon = ({
     }
   };
   
+  // Using React's generic MouseEventHandler with unknown element type
+  const handleMouseEnter = () => setIsHovered(true);
+  const handleMouseLeave = () => setIsHovered(false);
+  
   return (
     <div 
       className={`transition-colors duration-300 ${getAnimationClass()}`}
       style={{ color: isHovered ? hoverColor : "currentColor" }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       {...props}
     >
       {children}
