@@ -26,15 +26,17 @@ import {
   Lightbulb,
   BarChart3
 } from "lucide-react";
+import { openInNewTab } from "@/utils/navigation";
 
 export const NeuroPenSidebar = () => {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const location = useLocation();
   const currentPath = location.pathname;
-
-  const isActive = (path: string) => currentPath === path;
   
+  // Define which paths should open in a new tab
+  const openInNewTabPaths = ['/graph', '/notes', '/reader', '/materials'];
+
   const mainMenuItems = [
     { title: "Dashboard", url: "/", icon: LayoutDashboard },
     { title: "Knowledge Graph", url: "/graph", icon: Brain },
@@ -54,6 +56,13 @@ export const NeuroPenSidebar = () => {
   const systemItems = [
     { title: "Settings", url: "/settings", icon: Settings },
   ];
+
+  const handleItemClick = (e: React.MouseEvent, url: string) => {
+    if (openInNewTabPaths.includes(url)) {
+      e.preventDefault();
+      openInNewTab(url);
+    }
+  };
 
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-3 p-2 rounded-md transition-all ${
@@ -85,7 +94,11 @@ export const NeuroPenSidebar = () => {
               {mainMenuItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink to={item.url} className={getNavClass}>
+                    <NavLink 
+                      to={item.url} 
+                      className={getNavClass}
+                      onClick={(e) => handleItemClick(e, item.url)}
+                    >
                       <item.icon className={`h-5 w-5 ${!collapsed && "mr-2"}`} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -103,7 +116,11 @@ export const NeuroPenSidebar = () => {
               {learningToolsItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink to={item.url} className={getNavClass}>
+                    <NavLink 
+                      to={item.url} 
+                      className={getNavClass}
+                      onClick={(e) => handleItemClick(e, item.url)}
+                    >
                       <item.icon className={`h-5 w-5 ${!collapsed && "mr-2"}`} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>
@@ -121,7 +138,11 @@ export const NeuroPenSidebar = () => {
               {systemItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <NavLink to={item.url} className={getNavClass}>
+                    <NavLink 
+                      to={item.url} 
+                      className={getNavClass}
+                      onClick={(e) => handleItemClick(e, item.url)}
+                    >
                       <item.icon className={`h-5 w-5 ${!collapsed && "mr-2"}`} />
                       {!collapsed && <span>{item.title}</span>}
                     </NavLink>

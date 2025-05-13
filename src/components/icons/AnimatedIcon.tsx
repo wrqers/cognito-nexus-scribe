@@ -31,7 +31,7 @@ export const AnimatedIcon = ({
     }
   };
   
-  // Fixed: Using generic React.MouseEventHandler type instead
+  // Fixed: Using generic React event handlers without specifying the element type
   const handleMouseEnter = () => setIsHovered(true);
   const handleMouseLeave = () => setIsHovered(false);
   

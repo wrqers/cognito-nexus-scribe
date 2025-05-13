@@ -16,7 +16,8 @@ import {
   Check, 
   Clock,
   Link as LinkIcon,
-  Pencil
+  Pencil,
+  ExternalLink
 } from "lucide-react";
 import { 
   Popover,
@@ -32,6 +33,8 @@ import {
   CollapsibleContent,
   CollapsibleTrigger
 } from "@/components/ui/collapsible";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { toast } from "@/hooks/use-toast";
 
 // Sample note data
 const notesData = [
@@ -53,7 +56,13 @@ const notesData = [
   }
 ];
 
-const NoteCard = ({ note }: { note: typeof notesData[0] }) => {
+interface NoteCardProps {
+  note: typeof notesData[0];
+  onOpenInNewTab: (noteId: number) => void;
+  onEdit: (noteId: number) => void;
+}
+
+const NoteCard = ({ note, onOpenInNewTab, onEdit }: NoteCardProps) => {
   const date = new Date(note.created);
   const formattedDate = `${date.toLocaleDateString()} at ${date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' })}`;
   
@@ -62,9 +71,14 @@ const NoteCard = ({ note }: { note: typeof notesData[0] }) => {
       <CardContent className="p-4">
         <div className="flex justify-between items-start">
           <h3 className="text-xl font-semibold text-neuropen-text">{note.title}</h3>
-          <Button variant="ghost" size="sm" className="p-1 h-8 w-8">
-            <Pencil className="h-4 w-4" />
-          </Button>
+          <div className="flex gap-1">
+            <Button variant="ghost" size="sm" className="p-1 h-8 w-8" onClick={() => onEdit(note.id)}>
+              <Pencil className="h-4 w-4" />
+            </Button>
+            <Button variant="ghost" size="sm" className="p-1 h-8 w-8" onClick={() => onOpenInNewTab(note.id)}>
+              <ExternalLink className="h-4 w-4" />
+            </Button>
+          </div>
         </div>
         <p className="text-neuropen-muted mt-2 line-clamp-2">{note.content}</p>
         <div className="flex items-center text-xs text-neuropen-muted mt-3 gap-2">
@@ -86,7 +100,12 @@ const NoteCard = ({ note }: { note: typeof notesData[0] }) => {
           <span className="text-xs flex items-center gap-1 text-neuropen-muted">
             <LinkIcon className="h-3 w-3" /> {note.links} connections
           </span>
-          <Button variant="outline" size="sm" className="h-7 text-xs border-neuropen-border">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="h-7 text-xs border-neuropen-border"
+            onClick={() => onOpenInNewTab(note.id)}
+          >
             View Note
           </Button>
         </div>
@@ -98,6 +117,86 @@ const NoteCard = ({ note }: { note: typeof notesData[0] }) => {
 const NotesPage = () => {
   const [filterOpen, setFilterOpen] = useState(false);
   const [sortOption, setSortOption] = useState("newest");
+  const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
+  const [newNoteTitle, setNewNoteTitle] = useState("");
+  const [newNoteContent, setNewNoteContent] = useState("");
+  const [newNoteTags, setNewNoteTags] = useState("");
+  const [editingNoteId, setEditingNoteId] = useState<number | null>(null);
+  const [notes, setNotes] = useState(notesData);
+
+  const handleCreateNote = () => {
+    setEditingNoteId(null);
+    setNewNoteTitle("");
+    setNewNoteContent("");
+    setNewNoteTags("");
+    setIsNoteDialogOpen(true);
+  };
+
+  const handleEditNote = (noteId: number) => {
+    const note = notes.find(n => n.id === noteId);
+    if (note) {
+      setEditingNoteId(noteId);
+      setNewNoteTitle(note.title);
+      setNewNoteContent(note.content);
+      setNewNoteTags(note.tags.join(", "));
+      setIsNoteDialogOpen(true);
+    }
+  };
+
+  const handleSaveNote = () => {
+    if (!newNoteTitle.trim()) return;
+
+    if (editingNoteId) {
+      // Edit existing note
+      setNotes(notes.map(note => 
+        note.id === editingNoteId ? {
+          ...note,
+          title: newNoteTitle,
+          content: newNoteContent,
+          tags: newNoteTags.split(",").map(tag => tag.trim()).filter(tag => tag)
+        } : note
+      ));
+
+      toast({
+        title: "Note Updated",
+        description: `Updated note: "${newNoteTitle}"`,
+      });
+    } else {
+      // Create new note
+      const newNote = {
+        id: Date.now(),
+        title: newNoteTitle,
+        content: newNoteContent,
+        created: new Date().toISOString(),
+        tags: newNoteTags.split(",").map(tag => tag.trim()).filter(tag => tag),
+        links: 0
+      };
+
+      setNotes([newNote, ...notes]);
+
+      toast({
+        title: "Note Created",
+        description: `Created note: "${newNoteTitle}"`,
+      });
+    }
+
+    setIsNoteDialogOpen(false);
+  };
+
+  const handleOpenNoteInNewTab = (noteId: number) => {
+    const note = notes.find(n => n.id === noteId);
+    if (note) {
+      // In a real app, we'd navigate to a dedicated note page
+      // For now, we'll simulate it by opening a new window with note data
+      const noteUrl = `/notes/${noteId}`;
+      window.open(noteUrl, '_blank');
+      
+      toast({
+        title: "Note Opened",
+        description: `Opened "${note.title}" in new tab`,
+      });
+    }
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -163,7 +262,10 @@ const NotesPage = () => {
             </div>
           </PopoverContent>
         </Popover>
-        <Button className="bg-neuropen-primary hover:bg-neuropen-primary/90">
+        <Button 
+          className="bg-neuropen-primary hover:bg-neuropen-primary/90"
+          onClick={handleCreateNote}
+        >
           <Plus className="h-4 w-4 mr-2" /> New Note
         </Button>
       </div>
@@ -209,10 +311,15 @@ const NotesPage = () => {
         </CollapsibleContent>
       </Collapsible>
 
-      {notesData.length > 0 ? (
+      {notes.length > 0 ? (
         <div>
-          {notesData.map(note => (
-            <NoteCard key={note.id} note={note} />
+          {notes.map(note => (
+            <NoteCard 
+              key={note.id} 
+              note={note} 
+              onOpenInNewTab={handleOpenNoteInNewTab}
+              onEdit={handleEditNote}
+            />
           ))}
         </div>
       ) : (
@@ -222,11 +329,66 @@ const NotesPage = () => {
           <p className="text-neuropen-muted text-center max-w-md mb-4">
             Start creating notes to organize your knowledge and build your personal knowledge base.
           </p>
-          <Button className="bg-neuropen-primary hover:bg-neuropen-primary/90">
+          <Button 
+            className="bg-neuropen-primary hover:bg-neuropen-primary/90"
+            onClick={handleCreateNote}
+          >
             Create Your First Note
           </Button>
         </Card>
       )}
+
+      {/* Note Dialog for creating/editing */}
+      <Dialog open={isNoteDialogOpen} onOpenChange={setIsNoteDialogOpen}>
+        <DialogContent className="bg-neuropen-surface border-neuropen-border max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>{editingNoteId ? "Edit Note" : "Create Note"}</DialogTitle>
+            <DialogDescription>
+              {editingNoteId ? "Edit your note details" : "Add a new note to your knowledge base"}
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <Label htmlFor="title">Title</Label>
+              <Input
+                id="title"
+                value={newNoteTitle}
+                onChange={(e) => setNewNoteTitle(e.target.value)}
+                placeholder="Note title"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="content">Content</Label>
+              <textarea
+                id="content"
+                value={newNoteContent}
+                onChange={(e) => setNewNoteContent(e.target.value)}
+                placeholder="Note content"
+                className="min-h-[200px] w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm"
+              />
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="tags">Tags (comma separated)</Label>
+              <Input
+                id="tags"
+                value={newNoteTags}
+                onChange={(e) => setNewNoteTags(e.target.value)}
+                placeholder="AI, Machine Learning, Research"
+              />
+            </div>
+          </div>
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsNoteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveNote}>
+              {editingNoteId ? "Save Changes" : "Create Note"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
