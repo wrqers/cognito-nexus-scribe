@@ -1,117 +1,97 @@
 
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Layout } from "./components/Layout";
-import { PageTransition } from "./components/PageTransition";
-import { ScrollToTopButton } from "./components/ScrollToTopButton";
-import Dashboard from "./pages/Dashboard";
-import KnowledgeGraph from "./pages/KnowledgeGraph";
-import MaterialsPage from "./pages/Materials";
-import NotesPage from "./pages/Notes";
-import ReaderPage from "./pages/Reader";
-import FlashcardsPage from "./pages/Flashcards";
-import ExperimentsPage from "./pages/Experiments";
-import SettingsPage from "./pages/Settings";
-import MetacognitiveInsights from "./pages/MetacognitiveInsights";
-import AdaptiveFlashcards from "./pages/AdaptiveFlashcards";
-import IntelligenceAmplification from "./pages/IntelligenceAmplification";
-import NotFound from "./pages/NotFound";
+import React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar, useColorScheme } from 'react-native';
+import { ThemeProvider } from './providers/ThemeProvider';
 
-const queryClient = new QueryClient();
+// Import screens
+import DashboardScreen from './screens/DashboardScreen';
+import KnowledgeGraphScreen from './screens/KnowledgeGraphScreen';
+import NotesScreen from './screens/NotesScreen';
+import ReaderScreen from './screens/ReaderScreen';
+import SettingsScreen from './screens/SettingsScreen';
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <Layout>
-              <PageTransition transitionType="fade">
-                <Dashboard />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/graph" element={
-            <Layout>
-              <PageTransition transitionType="slide">
-                <KnowledgeGraph />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/materials" element={
-            <Layout>
-              <PageTransition transitionType="fade">
-                <MaterialsPage />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/notes" element={
-            <Layout>
-              <PageTransition transitionType="slide">
-                <NotesPage />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/reader" element={
-            <Layout>
-              <PageTransition transitionType="zoom">
-                <ReaderPage />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/flashcards" element={
-            <Layout>
-              <PageTransition transitionType="slide">
-                <FlashcardsPage />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/experiments" element={
-            <Layout>
-              <PageTransition transitionType="zoom">
-                <ExperimentsPage />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/settings" element={
-            <Layout>
-              <PageTransition transitionType="fade">
-                <SettingsPage />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/metacognitive-insights" element={
-            <Layout>
-              <PageTransition transitionType="slide">
-                <MetacognitiveInsights />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/adaptive-flashcards" element={
-            <Layout>
-              <PageTransition transitionType="zoom">
-                <AdaptiveFlashcards />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="/intelligence-amplification" element={
-            <Layout>
-              <PageTransition transitionType="fade">
-                <IntelligenceAmplification />
-              </PageTransition>
-            </Layout>
-          } />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <ScrollToTopButton />
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+// Import icons
+import { Book, Home, Network, FileText, Settings } from 'lucide-react-native';
+
+const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
+
+// Create stack navigators for screens that need their own navigation stack
+const KnowledgeGraphStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="KnowledgeGraphMain" 
+      component={KnowledgeGraphScreen} 
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
 );
+
+const NotesStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="NotesMain" 
+      component={NotesScreen} 
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+);
+
+const ReaderStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen 
+      name="ReaderMain" 
+      component={ReaderScreen} 
+      options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+);
+
+const App = () => {
+  const colorScheme = useColorScheme();
+
+  return (
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <NavigationContainer>
+          <StatusBar barStyle={colorScheme === 'dark' ? 'light-content' : 'dark-content'} />
+          <Tab.Navigator
+            screenOptions={({ route }) => ({
+              tabBarIcon: ({ color, size }) => {
+                switch (route.name) {
+                  case 'Dashboard':
+                    return <Home color={color} size={size} />;
+                  case 'KnowledgeGraph':
+                    return <Network color={color} size={size} />;
+                  case 'Notes':
+                    return <FileText color={color} size={size} />;
+                  case 'Reader':
+                    return <Book color={color} size={size} />;
+                  case 'Settings':
+                    return <Settings color={color} size={size} />;
+                  default:
+                    return null;
+                }
+              },
+              tabBarActiveTintColor: '#9b87f5',
+              tabBarInactiveTintColor: 'gray',
+              headerShown: false,
+            })}
+          >
+            <Tab.Screen name="Dashboard" component={DashboardScreen} />
+            <Tab.Screen name="KnowledgeGraph" component={KnowledgeGraphStack} />
+            <Tab.Screen name="Notes" component={NotesStack} />
+            <Tab.Screen name="Reader" component={ReaderStack} />
+            <Tab.Screen name="Settings" component={SettingsScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </ThemeProvider>
+    </SafeAreaProvider>
+  );
+};
 
 export default App;
